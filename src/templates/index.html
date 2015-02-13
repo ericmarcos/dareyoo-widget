@@ -1,0 +1,165 @@
+<div class="dareyoo-widget" on-click="interaction" on-mouseover="over">
+    {{#user}}
+    <div class="dareyoo-widget-logged-in">
+        <span class="username">
+            <a href="https://www.dareyoo.com/app/profile/{{user.id}}/bets?utm_source=referal&utm_medium=solobasket&utm_campaign=widget_solobasket" target="_blank">{{user.username}}</a>
+        </span>
+    </div>
+    {{/user}}
+    <div class="dareyoo-widget-header" on-click="header">
+        <img src="{{header_pic}}">
+    </div>
+    <div class="dareyoo-widget-body">
+    {{#initial_loading}}
+    <div class="initial_loading">
+        <h1>Cargando...</h1>
+        <div class="sk-spinner sk-spinner-chasing-dots">
+            <div class="sk-dot1"></div>
+            <div class="sk-dot2"></div>
+        </div>
+    </div>
+    {{/initial_loading}}
+    {{#participate}}
+        <div class="dareyoo-widget-body-bg">
+            {{^bg}}
+                {{#basketball_result}}
+                <div class="dareyoo-basketball-bg"></div>
+                {{/basketball_result}}
+                {{#football_result}}
+                <div class="dareyoo-football-bg"></div>
+                {{/football_result}}
+            {{/bg}}
+            {{#bg}}
+            <div class="dareyoo-custom-bg">
+                <img src="{{bg}}">
+            </div>
+            {{/bg}}
+            <div class="dareyoo-footer-bg" on-click="footer">
+                <img src="{{footer_pic}}">
+            </div>
+        </div>
+        <div id="dareyoo-widget-content">
+
+            {{#generic}}
+            <h1 id="dareyoo-generic-bet-title">{{title}}</h1>
+            <div class="{{error_generic ? 'animated wobble ' : ''}}results-wrapper">
+                {{#bids:i}}
+                <div class="{{initial_call_to_action ? 'animated rubberBand infinite ' : ''}}generic-result{{ (result == bids[i].title) ? ' result-active' : '' }}" on-click="result">
+                    <div class="result-title">
+                        <div class="text">{{title}}</div>
+                        <!--<div class="tick">{{ (result == bids[i].title) ? '✔' : '' }}</div>-->
+                    </div>
+                    <div class="result-img">
+                        {{#pic}}<img class="" src="{{pic}}">{{/pic}}
+                    </div>
+                </div>
+                {{/bids}}
+            </div>
+            {{/generic}}
+
+            {{#basketball_result}}
+            <h1>{{title}}</h1>
+            <div class="teams">
+                <div class="team">
+                    <div class="team-shield">
+                        <img src="{{choices[0].pic}}" width="90" height="90" alt="escudo equipo 1">
+                    </div>
+                    <div class="team-name">{{choices[0].title}}</div>
+                    <div class="{{error_result1 ? 'animated wobble' : ''}}">
+                        <input type="text" id="result1" value='{{result1}}' class="{{initial_call_to_action ? 'animated rubberBand infinite ' : ''}}basket-result-input" placeholder="?">
+                    </div>
+                </div>
+                <div class="versus"></div>
+                <div class="team">
+                    <div class="team-shield">
+                        <img src="{{choices[1].pic}}" width="90" height="90" alt="escudo equipo 2">    
+                    </div>
+                    <div class="team-name">{{choices[1].title}}</div>
+                    <div class="{{error_result2 ? 'animated wobble' : ''}}">
+                        <input type="text" id="result2" value='{{result2}}' class="{{initial_call_to_action ? 'animated rubberBand infinite ' : ''}}basket-result-input" placeholder="?">
+                    </div>
+                </div>
+            </div>
+            {{/basketball_result}}
+
+            {{#football_result}}
+            <h1>{{title}}</h1>
+            <div class="teams">
+                <div class="team">
+                    <div class="team-shield">
+                        <img src="{{choices[0].pic}}" width="90" height="90" alt="escudo equipo 1">
+                    </div>
+                    <div class="team-name">{{choices[0].title}}</div>
+                    <div class="{{error_result1 ? 'animated wobble' : ''}}">
+                        <input type="text" id="result1" value='{{result1}}' class="{{initial_call_to_action ? 'animated rubberBand infinite ' : ''}}football-result-input" placeholder="?">
+                    </div>
+                </div>
+                <div class="versus"></div>
+                <div class="team">
+                    <div class="team-shield">
+                        <img src="{{choices[1].pic}}" width="90" height="90" alt="escudo equipo 2">    
+                    </div>
+                    <div class="team-name">{{choices[1].title}}</div>
+                    <div class="{{error_result2 ? 'animated wobble' : ''}}">
+                        <input type="text" id="result2" value='{{result2}}' class="{{initial_call_to_action ? 'animated rubberBand infinite ' : ''}}football-result-input" placeholder="?">
+                    </div>
+                </div>
+            </div>
+            {{/football_result}}
+            <div class="dareyoo-btn apostar-btn" on-click="apostar">
+                {{^loading}}
+                <div>¡Participa!</div>
+                {{/loading}}
+                {{#loading}}
+                <div class="center">
+                    <div class="sk-spinner sk-spinner-chasing-dots">
+                        <div class="sk-dot1"></div>
+                        <div class="sk-dot2"></div>
+                    </div>
+                </div>
+                {{/loading}}
+            </div>
+            
+        </div>
+    {{/participate}}
+    {{#register}}
+        <h1 class="juegas-por">Juegas por</h1>
+        <h1 class="resultado">{{result}}</h1>
+        <h1 class="registra-tu-resultado">Registra tu resultado en <a href="https://www.dareyoo.com/?utm_source=referal&utm_medium=solobasket&utm_campaign=widget_solobasket" target="_blank">dareyoo</a>:</h1>
+        <input class="dareyoo-input" type="text" id="email" value='{{email}}' placeholder="e-mail">
+        <input class="dareyoo-input" type="password" id="password" value='{{password}}' placeholder="password">
+        <div class="envia dareyoo-btn-white center" on-click="registrar">
+            {{^loading}}
+            <div>¡Envía!</div>
+            {{/loading}}
+            {{#loading}}
+            <div class="center">
+                <div class="sk-spinner sk-spinner-chasing-dots inverse">
+                    <div class="sk-dot1"></div>
+                    <div class="sk-dot2"></div>
+                </div>
+            </div>
+            {{/loading}}
+        </div>
+        <p class="dareyoo-terms-conditions">Al enviar estas aceptando los <a href="http://www.dareyoo.com/terminos-y-condiciones/?utm_source=referal&utm_medium=solobasket&utm_campaign=widget_solobasket" target="_blank">términos y condiciones</a>.</p>
+    {{/register}}
+    {{#share}}
+        <h1 class="juegas-por">Juegas por</h1>
+        <h1 class="resultado">{{result}}</h1>
+        <h1 class="todo-el-mundo">¡Que se entere todo el mundo!</h1>
+        <div class="dareyoo-btn-twitter center" on-click="twitter_share">Compartir en Twitter</div>
+        <div class="dareyoo-btn-facebook center" on-click="facebook_share">Compartir en Facebook</div>
+        <div class="mas-porras">
+            <h1>¡Más porras en <a href="http://www.dareyoo.com/?utm_source=referal&utm_medium=solobasket&utm_campaign=widget_solobasket", target="_blank">dareyoo</a>!</h1>
+            <p>"<a href="https://www.dareyoo.com/app/main/bet/{{next_bet.id}}?utm_source=referal&utm_medium=solobasket&utm_campaign=widget_solobasket" target="_blank">{{next_bet.title}}</a>"</p>
+        </div>
+    {{/share}}
+    {{#error}}
+        <div class="dareyoo-widget-error">
+            <h1>¡Que no panda el cúnico!</h1>
+            <p>{{{error_msg}}}</p>
+            <div class="dareyoo-btn-white center" on-click="error_off">Aceptar</div>
+        </div>
+    {{/error}}
+    </div>
+</div>

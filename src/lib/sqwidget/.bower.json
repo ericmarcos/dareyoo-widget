@@ -1,0 +1,44 @@
+{
+  "name": "sqwidget",
+  "main": "sqwidget.js",
+  "version": "2.0.9",
+  "homepage": "https://github.com/premasagar/sqwidget",
+  "authors": [
+    "Adhip Gupta <me@adhipg.in>",
+    "Simon Elliott <simon@papercreatures.com>"
+  ],
+  "description": "A template/framework to build widgets.",
+  "keywords": [
+    "widgets"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/lib",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "when": "~2.6.0",
+    "async": "~0.2.5",
+    "mocha": "~1.14.0",
+    "chai": "~1.8.1",
+    "bonzo": "~1.3.6",
+    "qwery": "~3.4.1",
+    "requirejs-domready": "~2.0.1",
+    "bean": "~1.0.4",
+    "requirejs": "~2.1.9",
+    "youarei": "0.9.6"
+  },
+  "_release": "2.0.9",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.0.9",
+    "commit": "308f47aa48c84d9b3f42b3ea37ffcc4eb18a9860"
+  },
+  "_source": "git://github.com/premasagar/sqwidget.git",
+  "_target": "2.0.9",
+  "_originalSource": "sqwidget"
+}
