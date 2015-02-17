@@ -7,7 +7,9 @@
     </div>
     {{/user}}
     <div class="dareyoo-widget-header" on-click="header">
+        {{#header_pic}}
         <img src="{{header_pic}}">
+        {{/header_pic}}
     </div>
     <div class="dareyoo-widget-body">
     {{#initial_loading}}
@@ -34,8 +36,30 @@
                 <img src="{{bg}}">
             </div>
             {{/bg}}
-            <div class="dareyoo-footer-bg" on-click="footer">
+            <div class="dareyoo-footer-bg">
+                {{#footer_pic}}
                 <img src="{{footer_pic}}">
+                {{/footer_pic}}
+                {{^footer_pic}}
+                <div class="footer-column">
+                    <div class="dareyoo-result-percentage">
+                        <div class="dareyoo-result-percentage-text">0%</div>
+                        <div class="dareyoo-result-text">0 - 0</div>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <div class="dareyoo-result-percentage">
+                        <div class="dareyoo-result-percentage-text">0%</div>
+                        <div class="dareyoo-result-text">0 - 0</div>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <div class="dareyoo-result-percentage">
+                        <div class="dareyoo-result-percentage-text">0%</div>
+                        <div class="dareyoo-result-text">0 - 0</div>
+                    </div>
+                </div>
+                {{/footer_pic}}
             </div>
         </div>
         <div id="dareyoo-widget-content">

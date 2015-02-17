@@ -5,7 +5,7 @@
 @light-white: #eee;
 @font-family-custom: 'Source Sans Pro', Tahoma, sans-serif;
 @font-family-base:        @font-family-custom;
-@widget-width: 298px;
+@widget-width: 308px;
 
 .dareyoo-widget {
     position: relative;
@@ -88,11 +88,39 @@
             .dareyoo-footer-bg {
                 width: @widget-width;
                 height: 79px;
-                cursor: pointer;
                 border: none;
                 img {
-                    width: 298px;
+                    width: @widget-width;
                     height: 79px;
+                }
+                .footer-column {
+                    position: relative;
+                    width: 33.3%;
+                    background-color: #fff;
+                    float: left;
+                    height: 70px;
+                    .dareyoo-result-percentage {
+                        background-color: @brand-primary;
+                        position: absolute;
+                        bottom: 0px;
+                        width: 100%;
+                        height: 50%;
+                        .dareyoo-result-text {
+                            position: absolute;
+                            bottom: -4px;
+                            color: #fff;
+                            width: 100%;
+                            text-align: center;
+                        }
+                        .dareyoo-result-percentage-text {
+                            position: absolute;
+                            top: -12px;
+                            color: @brand-primary;
+                            width: 100%;
+                            text-align: center;
+                            font-size: 11px;
+                        }
+                    }
                 }
             }
         }

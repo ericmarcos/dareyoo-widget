@@ -18,16 +18,16 @@ define([
   var DAREYOO_API_SECRET = 'd9a9eae1f27dc20fc754d13cb5012d9d54120636';*/
 
   /** LOCAL **/
-  /*var DAREYOO_API_URL = 'http://dareyoo.dev:8000/api/v1';
+  var DAREYOO_API_URL = 'http://dareyoo.dev:8000/api/v1';
   var DAREYOO_LOGIN_URL = 'http://dareyoo.dev:8000/oauth2/access_token';
   var DAREYOO_API_ID = '3cbaf99470699751ce96';
-  var DAREYOO_API_SECRET = 'badfc6a14c8b3a0137db589068a2ed316d2ffefd';*/
+  var DAREYOO_API_SECRET = 'badfc6a14c8b3a0137db589068a2ed316d2ffefd';
 
   /** PRODUCTION **/
-  var DAREYOO_API_URL = 'https://www.dareyoo.com/api/v1';
+  /**var DAREYOO_API_URL = 'https://www.dareyoo.com/api/v1';
   var DAREYOO_LOGIN_URL = 'https://www.dareyoo.com/oauth2/access_token';
   var DAREYOO_API_ID = '325bcfda582a97a53df1';
-  var DAREYOO_API_SECRET = '1fbab8a110eedf983cfd327c5a0bab61784d2423';
+  var DAREYOO_API_SECRET = '1fbab8a110eedf983cfd327c5a0bab61784d2423';**/
   var WIDGET_NAME = 'generic';
 
   
@@ -142,7 +142,7 @@ define([
 
     var onTwitterClick = function(event) {
       APISendShare('twitter');
-      var text = "He apostado por " + view.get('result') + " en la porra @solobasket sobre el %23AllStar2015 (vía @dareyooApp)";
+      var text = "He apostado por BAR " + view.get('result') + " LEV en la porra @sport de la jornada %23LigaBBVA (vía @dareyooApp)";
       //var text = "He apostado por " + view.get('result') + " en la porra @sport del @FCBarcelona_es (vía @dareyooApp)";
       var url = "http://www.dareyoo.com/app/main/bet/" + bet.id + "?utm_source=referal&utm_medium=sport&utm_campaign=widgetsport";
       window.open('http://twitter.com/share?text=' + text + '&url=' + url,'_blank');
@@ -282,8 +282,13 @@ define([
         email: "",
         password: "",
         header_pic: "",
-        footer_pic: ""
-
+        footer_pic: "",
+        percent_1: 0,
+        percent_2: 0,
+        percent_3: 0,
+        top_bid_1: 0,
+        top_bid_2: 0,
+        top_bid_3: 0,
       }
     });
     
@@ -328,6 +333,36 @@ define([
         var g = document.getElementsByClassName("results-wrapper")[0];
         if(g)
           g.style.height = c.offsetHeight - t.offsetHeight - 25 + "px";
+        var sorted_bids = bet.bids.sort(function(a, b) {
+            var x = a.participants; var y = b.participants;
+            return ((x > y) ? -1 : ((x < y) ? 1 : 0));
+        });
+        if(!widget.footer_pic) {
+          var p = 0;
+          for(var i=0; i<sorted_bids.length; i++)
+            p += sorted_bids[i].participants;
+          console.log(sorted_bids);
+          var min_percent = 20;
+          var length_percent = 30;
+          if(sorted_bids.length > 0) {
+            var p0 = sorted_bids[0].participants / p;
+            document.getElementsByClassName("dareyoo-result-percentage")[0].style.height = (min_percent + p0 * length_percent) + "%";
+            document.getElementsByClassName("dareyoo-result-text")[0].innerText = sorted_bids[0].title;
+            document.getElementsByClassName("dareyoo-result-percentage-text")[0].innerText = Math.round(p0 * 100) + "%";
+          }
+          if(sorted_bids.length > 1) {
+            var p1 = sorted_bids[1].participants / p;
+            document.getElementsByClassName("dareyoo-result-percentage")[1].style.height = (min_percent + p1 * length_percent) + "%";
+            document.getElementsByClassName("dareyoo-result-text")[1].innerText = sorted_bids[1].title;
+            document.getElementsByClassName("dareyoo-result-percentage-text")[1].innerText = Math.round(p1 * 100) + "%";
+          }
+          if(sorted_bids.length > 2) {
+            var p2 = sorted_bids[2].participants / p;
+            document.getElementsByClassName("dareyoo-result-percentage")[2].style.height = (min_percent + p2 * length_percent) + "%";
+            document.getElementsByClassName("dareyoo-result-text")[2].innerText = sorted_bids[2].title;
+            document.getElementsByClassName("dareyoo-result-percentage-text")[2].innerText = Math.round(p2 * 100) + "%";
+          }
+        }
       } else {
         //TODO: error!
       }
