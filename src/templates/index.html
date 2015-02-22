@@ -1,4 +1,4 @@
-<div class="dareyoo-widget" on-click="interaction" on-mouseover="over">
+<div class="dareyoo-widget" on-mouseover="over">
     {{#user}}
     <div class="dareyoo-widget-logged-in">
         <span class="username">
@@ -43,20 +43,20 @@
                 {{^footer_pic}}
                 <div class="footer-column">
                     <div class="dareyoo-result-percentage">
-                        <div class="dareyoo-result-percentage-text">0%</div>
-                        <div class="dareyoo-result-text">0 - 0</div>
+                        <div class="dareyoo-result-percentage-text"></div>
+                        <div class="dareyoo-result-text"></div>
                     </div>
                 </div>
                 <div class="footer-column">
                     <div class="dareyoo-result-percentage">
-                        <div class="dareyoo-result-percentage-text">0%</div>
-                        <div class="dareyoo-result-text">0 - 0</div>
+                        <div class="dareyoo-result-percentage-text"></div>
+                        <div class="dareyoo-result-text"></div>
                     </div>
                 </div>
                 <div class="footer-column">
                     <div class="dareyoo-result-percentage">
-                        <div class="dareyoo-result-percentage-text">0%</div>
-                        <div class="dareyoo-result-text">0 - 0</div>
+                        <div class="dareyoo-result-percentage-text"></div>
+                        <div class="dareyoo-result-text"></div>
                     </div>
                 </div>
                 {{/footer_pic}}
@@ -71,7 +71,6 @@
                 <div class="{{initial_call_to_action ? 'animated rubberBand infinite ' : ''}}generic-result{{ (result == bids[i].title) ? ' result-active' : '' }}" on-click="result">
                     <div class="result-title">
                         <div class="text">{{title}}</div>
-                        <!--<div class="tick">{{ (result == bids[i].title) ? '✔' : '' }}</div>-->
                     </div>
                     <div class="result-img">
                         {{#pic}}<img class="" src="{{pic}}">{{/pic}}
@@ -178,6 +177,11 @@
             <p>"<a href="https://www.dareyoo.com/app/main/bet/{{next_bet.id}}?utm_source=referal&utm_medium=solobasket&utm_campaign=widget_solobasket" target="_blank">{{next_bet.title}}</a>"</p>
         </div>
     {{/share}}
+    {{#no_bets}}
+        <h1>¡Ya has participado en todas las porras!</h1>
+        <p>Pero eso no es todo amigos, ¿Te atreves a crear tus propias porras en dareyoo?</p>
+        <div class="dareyoo-btn-white center" on-click="crea">¡Crea tu porra!</div>
+    {{/no_bets}}
     {{#error}}
         <div class="dareyoo-widget-error">
             <h1>¡Que no panda el cúnico!</h1>

@@ -18,16 +18,16 @@ define([
   var DAREYOO_API_SECRET = 'd9a9eae1f27dc20fc754d13cb5012d9d54120636';*/
 
   /** LOCAL **/
-  var DAREYOO_API_URL = 'http://dareyoo.dev:8000/api/v1';
+  /**var DAREYOO_API_URL = 'http://dareyoo.dev:8000/api/v1';
   var DAREYOO_LOGIN_URL = 'http://dareyoo.dev:8000/oauth2/access_token';
   var DAREYOO_API_ID = '3cbaf99470699751ce96';
-  var DAREYOO_API_SECRET = 'badfc6a14c8b3a0137db589068a2ed316d2ffefd';
+  var DAREYOO_API_SECRET = 'badfc6a14c8b3a0137db589068a2ed316d2ffefd';**/
 
   /** PRODUCTION **/
-  /**var DAREYOO_API_URL = 'https://www.dareyoo.com/api/v1';
+  var DAREYOO_API_URL = 'https://www.dareyoo.com/api/v1';
   var DAREYOO_LOGIN_URL = 'https://www.dareyoo.com/oauth2/access_token';
   var DAREYOO_API_ID = '325bcfda582a97a53df1';
-  var DAREYOO_API_SECRET = '1fbab8a110eedf983cfd327c5a0bab61784d2423';**/
+  var DAREYOO_API_SECRET = '1fbab8a110eedf983cfd327c5a0bab61784d2423';
   var WIDGET_NAME = 'generic';
 
   
@@ -38,7 +38,24 @@ define([
     var bet = null;
     var bid = null;
     var interaction_sent = false;
+    var participated_bets = [];
     WIDGET_NAME = opts.config.name;
+    var tracking_code = "utm_source=referal&utm_medium=" + WIDGET_NAME + "&utm_campaign=widget" + WIDGET_NAME;
+
+    var formatString = function() {
+      // The string containing the format items (e.g. "{0}")
+      // will and always has to be the first argument.
+      var theString = arguments[0];
+      
+      // start with the second argument (i = 1)
+      for (var i = 1; i < arguments.length; i++) {
+        // "gm" = RegEx options for Global search (more than one instance)
+        // and for Multiline search
+        var regEx = new RegExp("\\{" + (i - 1) + "\\}", "gm");
+        theString = theString.replace(regEx, arguments[i]);
+      }
+      return theString;
+    };
 
     var request_token = function(email, pwd, callback) {
       var post_data = 'client_id=' + DAREYOO_API_ID + '&' +
@@ -55,7 +72,10 @@ define([
     };
 
     var api = function(endpoint, data, callback) {
-      var api_url = DAREYOO_API_URL + endpoint + "?format=json";
+      var format = "?format=json";
+      if(endpoint.indexOf('?') != -1)
+        format = "&format=json";
+      var api_url = DAREYOO_API_URL + endpoint + format;
       xhr = new XMLHttpRequest();
       var method = 'get';
       var send = "";
@@ -72,50 +92,69 @@ define([
     };
 
     var APISendImpression = function(callback) {
-      api("/widget_activation/" + WIDGET_NAME + "/impression/", {}, callback);
+      var data = {'participated_bets': participated_bets};
+      api("/widget_activation/" + WIDGET_NAME + "/impression/", data, callback);
     };
 
     var APISendInteraction = function() {
       view.set({initial_call_to_action: false});
       if(!interaction_sent) {
         interaction_sent = true;
-        api("/widget_activation/" + WIDGET_NAME + "/interaction/", {bet_id:bet.id});
+        var data = {};
+        if(bet)
+          data['bet_id'] = bet.id;
+        api("/widget_activation/" + WIDGET_NAME + "/interaction/", data);
       }
     };
 
     var APISendParticipate = function() {
-      api("/widget_activation/" + WIDGET_NAME + "/participate/", {bet_id:bet.id, result: view.get('result')});
+      var data = {result: view.get('result')};
+      if(bet)
+        data['bet_id'] = bet.id;
+      api("/widget_activation/" + WIDGET_NAME + "/participate/", data);
     };
 
     var APISendRegister = function() {
-      api("/widget_activation/" + WIDGET_NAME + "/register/", {bet_id:bet.id});
+      var data = {};
+      if(bet)
+        data['bet_id'] = bet.id;
+      api("/widget_activation/" + WIDGET_NAME + "/register/", data);
     };
 
     var APISendLogin = function() {
-      api("/widget_activation/" + WIDGET_NAME + "/login/", {bet_id:bet.id});
+      var data = {};
+      if(bet)
+        data['bet_id'] = bet.id;
+      api("/widget_activation/" + WIDGET_NAME + "/login/", data);
     };
 
     var APISendShare = function(medium) {
-      api("/widget_activation/" + WIDGET_NAME + "/share/", {bet_id:bet.id, medium:medium});
+      var data = {medium: medium};
+      if(bet)
+        data['bet_id'] = bet.id;
+      api("/widget_activation/" + WIDGET_NAME + "/share/", data);
     };
 
     var APISendBannerClick = function(banner) {
-      api("/widget_activation/" + WIDGET_NAME + "/banner/", {bet_id:bet.id, banner:banner});
+      var data = {banner: banner};
+      if(bet)
+        data['bet_id'] = bet.id;
+      api("/widget_activation/" + WIDGET_NAME + "/banner/", data);
     };
 
     var onApostarClick = function() {
       if(!view.get('loading')) {
-        APISendInteraction();
         APISendParticipate();
         var r = view.get('result');
         var r1 = parseInt(view.get('result1'));
         var r2 = parseInt(view.get('result2'));
         if(bet.lottery_type && bet.lottery_type.indexOf("result") != -1) {
-          if(isNaN(r1) || r1 < 0) {
+          var max_result = bet.lottery_type == "football_result" ? 20 : 200;
+          if(isNaN(r1) || r1 < 0 || r2 > max_result) {
             view.set({error_result1: true});
             return;
           }
-          if(isNaN(r2) || r2 < 0) {
+          if(isNaN(r2) || r2 < 0 || r2 > max_result) {
             view.set({error_result2: true});
             return;
           }
@@ -129,7 +168,6 @@ define([
         if(access_token) {
           view.set({loading:true});
           postBid();
-          APISendLogin();
         } else {
           view.set({participate:false, register:true});
         }
@@ -142,16 +180,15 @@ define([
 
     var onTwitterClick = function(event) {
       APISendShare('twitter');
-      var text = "He apostado por BAR " + view.get('result') + " LEV en la porra @sport de la jornada %23LigaBBVA (vía @dareyooApp)";
-      //var text = "He apostado por " + view.get('result') + " en la porra @sport del @FCBarcelona_es (vía @dareyooApp)";
-      var url = "http://www.dareyoo.com/app/main/bet/" + bet.id + "?utm_source=referal&utm_medium=sport&utm_campaign=widgetsport";
-      window.open('http://twitter.com/share?text=' + text + '&url=' + url,'_blank');
+      var text = formatString(widget.twitter_share_text, view.get('result'));
+      var url = "http://www.dareyoo.com/app/main/bet/" + bet.id + "?" + tracking_code;
+      window.open('http://twitter.com/share?text=' + text + '&url=' + encodeURIComponent(url),'_blank');
     };
 
     var onFacebookClick = function(event) {
       APISendShare('facebook');
-      var url = "http://www.dareyoo.com/app/main/bet/" + bet.id + "?utm_source=referal&utm_medium=sport&utm_campaign=widgetsport";
-      var fbpopup = window.open("https://www.facebook.com/sharer/sharer.php?u=" + url, "pop", "width=600, height=400, scrollbars=no");
+      var url = "http://www.dareyoo.com/app/main/bet/" + bet.id + "?" + tracking_code;
+      var fbpopup = window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(url), "pop", "width=600, height=400, scrollbars=no");
     };
 
     var onHeaderClick = function(event) {
@@ -164,8 +201,12 @@ define([
       window.open(widget.footer_link,'_blank');
     };
 
+    var onCreaClick = function(event) {
+      window.open("http://www.dareyoo.com?" + tracking_code, '_blank');
+    };
+
     var onErrorClick = function(event) {
-      view.set({error:false});
+      view.set({error:false, loading:false});
     };
 
     var onRegisterClick = function() {
@@ -186,24 +227,22 @@ define([
       if(event.target.status == 200) {
         var register_resp = JSON.parse(event.target.responseText);
         access_token = register_resp.access_token;
+        if(typeof(Storage) !== "undefined")
+          localStorage.setItem("dareyoo_access_token", access_token);
         postBid();
-        APISendRegister();
       } else {
         request_token(view.get('email'), view.get('password'), function(event){
           if(event.target.status == 200) {
             var data = JSON.parse(event.target.responseText);
             access_token = data.access_token;
-            if(typeof(Storage) !== "undefined") {
+            if(typeof(Storage) !== "undefined")
               localStorage.setItem("dareyoo_access_token", data.access_token);
-            }
             postBid();
-            APISendLogin();
           } else {
             view.set({loading:false, error:true, error_msg: "Hay un error en el email o contraseña.<br><br>Por favor, revísalos o recupera tu contraseña <a href='http://www.dareyoo.com/recover/' target='_blank'>aquí</a>"});
           }
         });
       }
-      
     };
 
     var postBid = function() {
@@ -215,21 +254,24 @@ define([
       if(bid) {
         api("/bids/" + bid.id + "/add_participant/", {}, onBidComplete);
       } else {
-        api("/bets/" + bet.id + "/bids/", { title:result }, function(event) {
-          bid = JSON.parse(event.target.responseText);
-          api("/bids/" + bid.id + "/add_participant/", {}, onBidComplete);
-        });
+        api("/bets/" + bet.id + "/bids/?auto_participate=true", { title:result }, onBidComplete);
       }
     };
 
     var onBidComplete = function(event) {
       view.set({loading:false});
-      if(event.target.status == 201) {
+      if(event.target.status == 201 || event.target.status == 200) {
         view.set({participate:false, register:false, share:true});
+        participated_bets.push(bet.id);
+        if(typeof(Storage) !== "undefined")
+          localStorage.setItem("dareyoo_participated_bets", JSON.stringify(participated_bets));
       } else {
         var message = JSON.parse(event.currentTarget.responseText).detail;
         if(message.indexOf("more than") != -1) {
           view.set({error: true, error_msg: "Parece que ya has participado en esta apuesta."});
+          participated_bets.push(bet.id);
+          if(typeof(Storage) !== "undefined")
+            localStorage.setItem("dareyoo_participated_bets", JSON.stringify(participated_bets));
         } else if(message.indexOf("enough") != -1) {
           view.set({error: true, error_msg: "Parece que te has quedado sin Yoos, pero no desesperes, cada día te damos 100.<br><br>¡Que no pare la fiesta!"});
         } else {
@@ -239,6 +281,11 @@ define([
     };
 
     if(typeof(Storage) !== "undefined") {
+      if(localStorage.getItem("dareyoo_participated_bets")) {
+        participated_bets = JSON.parse(localStorage.getItem("dareyoo_participated_bets"));
+      } else {
+        localStorage.setItem("dareyoo_participated_bets", JSON.stringify([]));
+      }
       if(localStorage.getItem("dareyoo_access_token")) {
         access_token = localStorage.getItem("dareyoo_access_token");
         api("/me/", null, function(event) {
@@ -271,6 +318,7 @@ define([
         generic: false,
         register: false,
         share: false,
+        no_bets: false,
         error: false,
         error_msg: "",
         loading: false,
@@ -297,9 +345,12 @@ define([
     view.on('registrar', onRegisterClick);
     view.on('twitter_share', onTwitterClick);
     view.on('facebook_share', onFacebookClick);
+    view.on('crea', onCreaClick);
     view.on('error_off', onErrorClick);
-    view.on('interaction', APISendInteraction);
-    view.on('over', function() { view.set({initial_call_to_action: false}); });
+    view.on('over', function() {
+      view.set({initial_call_to_action: false});
+      APISendInteraction();
+    });
     view.on('header', onHeaderClick);
     view.on('footer', onFooterClick);
     view.observe('result1', function ( newValue, oldValue, keypath ) {
@@ -312,14 +363,28 @@ define([
     var init = function(event) {
       if(event.target.status == 200) {
         widget = JSON.parse(event.currentTarget.responseText);
-        bet = widget.bets[0];
-        view.set({title: bet.title,
+        view.set({
           next_bet: widget.next_bets[0],
           bg: widget.bg_pic,
           header_pic: widget.header_pic,
-          footer_pic: widget.footer_pic,
+          footer_pic: widget.footer_pic
+        });
+        for(var i = 0; i < widget.bets.length; i++) {
+          if(widget.bets[i].id == widget.first_bet_id)
+              bet = widget.bets[i];
+        }
+        if(!bet) { //There are no bets active in this widget or the user already participated in all of them
+          view.set({
+            initial_loading: false,
+            no_bets: true
+          });
+          return;
+        }
+        view.set({
+          title: bet.title,
           bids: bet.bids,
-          choices: bet.choices});
+          choices: bet.choices
+        });
         if(bet.lottery_type == "football_result") {
           view.set({football_result: true});
         } else if(bet.lottery_type == "basketball_result") {
@@ -341,7 +406,6 @@ define([
           var p = 0;
           for(var i=0; i<sorted_bids.length; i++)
             p += sorted_bids[i].participants;
-          console.log(sorted_bids);
           var min_percent = 20;
           var length_percent = 30;
           if(sorted_bids.length > 0) {

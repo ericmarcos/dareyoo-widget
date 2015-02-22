@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700&subset=latin,latin-ext');
 .dareyoo-widget {
   position: relative;
-  width: 308px;
+  width: 298px;
   height: 100%;
   background-color: #ff4c4c;
   text-align: center;
@@ -28,17 +28,17 @@
   text-decoration: none;
 }
 .dareyoo-widget .dareyoo-widget-header {
-  width: 308px;
+  width: 298px;
   height: 66px;
   cursor: pointer;
 }
 .dareyoo-widget .dareyoo-widget-header img {
-  width: 308px;
+  width: 298px;
   height: 66px;
 }
 .dareyoo-widget .dareyoo-widget-body {
   position: relative;
-  width: 308px;
+  width: 298px;
   height: 335px;
   border: none;
 }
@@ -51,31 +51,31 @@
   height: 100%;
 }
 .dareyoo-widget .dareyoo-widget-body .dareyoo-widget-body-bg .dareyoo-basketball-bg {
-  width: 308px;
+  width: 298px;
   height: 255px;
   background-image: url('https://s3-eu-west-1.amazonaws.com/dareyoo-pre/widgets/solobasket/img/floor.jpg');
 }
 .dareyoo-widget .dareyoo-widget-body .dareyoo-widget-body-bg .dareyoo-football-bg {
-  width: 308px;
+  width: 298px;
   height: 255px;
   background-image: url('https://s3-eu-west-1.amazonaws.com/dareyoo-pro/widgets/sport/img/football_bg.jpg');
 }
 .dareyoo-widget .dareyoo-widget-body .dareyoo-widget-body-bg .dareyoo-custom-bg {
-  width: 308px;
+  width: 298px;
   height: 255px;
   background-color: #aaa;
 }
 .dareyoo-widget .dareyoo-widget-body .dareyoo-widget-body-bg .dareyoo-custom-bg img {
-  width: 308px;
+  width: 298px;
   height: 255px;
 }
 .dareyoo-widget .dareyoo-widget-body .dareyoo-widget-body-bg .dareyoo-footer-bg {
-  width: 308px;
+  width: 298px;
   height: 79px;
   border: none;
 }
 .dareyoo-widget .dareyoo-widget-body .dareyoo-widget-body-bg .dareyoo-footer-bg img {
-  width: 308px;
+  width: 298px;
   height: 79px;
 }
 .dareyoo-widget .dareyoo-widget-body .dareyoo-widget-body-bg .dareyoo-footer-bg .footer-column {
@@ -124,7 +124,7 @@
   height: 280px;
 }
 .dareyoo-widget .dareyoo-widget-body #dareyoo-widget-content .results-wrapper {
-  width: 308px;
+  width: 298px;
   overflow-y: auto;
 }
 .dareyoo-widget .dareyoo-widget-body #dareyoo-widget-content .results-wrapper .generic-result {
